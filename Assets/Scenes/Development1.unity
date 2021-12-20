@@ -129,7 +129,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5034
+  m_Name: pb_Mesh16904
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -707,6 +707,7 @@ GameObject:
   - component: {fileID: 2094938556}
   - component: {fileID: 2094938555}
   - component: {fileID: 2094938557}
+  - component: {fileID: 2094938558}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -808,7 +809,7 @@ CharacterController:
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
+  m_MinMoveDistance: 0
   m_Center: {x: 0, y: -1.04, z: 0}
 --- !u!114 &2094938557
 MonoBehaviour:
@@ -822,5 +823,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8752939bf8698b844a529d1db3bc00e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityAcceleration: -9.81
-  initialGravityVelocity: 0
+  gravityAcceleration: {x: 0, y: -9.81, z: 0}
+  gravityVelocity: {x: 0, y: 0, z: 0}
+  initialGravityVelocity: {x: 0, y: 0, z: 0}
+--- !u!114 &2094938558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094938551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6cd1b7996a7da042979e7e41586fb3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
