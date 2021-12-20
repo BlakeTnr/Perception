@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GroundCheck
 {
@@ -17,6 +18,7 @@ public class GroundCheck
 
     public bool isGrounded()
     {
+        calculateDisplacementDistance();
         moveCharacterIntoGround();
         bool isGrounded = characterController.isGrounded;
         undoMoveCharacterIntoGround();
@@ -26,17 +28,28 @@ public class GroundCheck
     private void calculateDisplacementDistance()
     {
         // Divide gravityForce by the absolute value of the largest value in the gravity force to get the displacement distance
-        Vector3 absoluteValuedGravityForce = new Vector3(Mathf.Abs(gravityForce.x), Mathf.Abs(gravityForce.y), Mathf.Abs(gravityForce.z));
-        displacementDistance = gravityForce / absoluteValuedGravityForce;
+        displacementDistance = gravityForce / largestAbsoluteValueInGravityForce();
+    }
+
+    private float largestAbsoluteValueInGravityForce()
+    {
+        float x = Mathf.Abs(gravityForce.x);
+        float y = Mathf.Abs(gravityForce.y);
+        float z = Mathf.Abs(gravityForce.z);
+
+        float[] xyz = { x, y, z };
+        float maxValue = xyz.Max();
+        return maxValue;
     }
 
     private void moveCharacterIntoGround()
     {
-
+        characterController.Move(displacementDistance);
     }
 
     private void undoMoveCharacterIntoGround()
     {
-
+        Vector3 oppositeDisplacementDistance = displacementDistance * -1;
+        characterController.Move(oppositeDisplacementDistance);
     }
 }
