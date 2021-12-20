@@ -6,35 +6,58 @@ public class CustomGravity : MonoBehaviour
 {
 
     /*
-        Todo
-        - Zero out the initialGravityVelocity when on ground
-        - Don't apply gravity when on ground
+        How the script works
+        - Take previous velocity and store it as a vector
+	    - Apply the acceleration to the previousVelocity
+        - Store newly applied velocity as previous velocity
     */
 
     CharacterController characterController;
-    public Vector3 gravityAcceleration = -9.81f;
-    public Vector3 gravityVelocity = 0;
+    public Vector3 gravityAcceleration = new Vector3(0, -9.81f, 0);
+    public Vector3 gravityVelocity = new Vector3(0, 0, 0);
+    public Vector3 initialGravityVelocity = new Vector3(0, 0, 0);
     private Vector3 previousGravityVelocity;
 
     // Start is called before the first frame update
     void Start()
     {
         characterController = gameObject.GetComponent<CharacterController>();
-        previousGravityVelocity = gravityVelocity;
+        previousGravityVelocity = initialGravityVelocity;
     }
 
     // Update is called once per frame
     void Update()
     {
-        applyGravity();
+        updateGravityVelocity();
+        applyGravityVelocity();
+        zeroIfOnGround();
+        previousGravityVelocity = gravityVelocity;
     }
 
     private void applyGravity()
     {
-        // Need to convert acceleration to distance
-        // Formula: d = vt + 1/2at^2
+        updateGravityVelocity();
+        applyGravityVelocity();
+        previousGravityVelocity = gravityVelocity;
+    }
 
-        Vector3 displacement = downwardVelocity * Time.deltaTime + (1 / 2) * (gravityAcceleration) * (Time.deltaTime) ^ 2;
+    private void zeroIfOnGround()
+    {
+        if (characterController.isGrounded)
+        {
+            gravityVelocity = Vector3.zero;
+            previousGravityVelocity = Vector3.zero;
+        }
+    }
 
+    private void applyGravityVelocity()
+    {
+        Vector3 displacement = gravityVelocity * Time.deltaTime;
+        characterController.Move(displacement);
+    }
+
+    private void updateGravityVelocity()
+    {
+        gravityVelocity = previousGravityVelocity + (gravityAcceleration * Time.deltaTime);
     }
 }
