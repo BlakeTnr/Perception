@@ -43,8 +43,8 @@ public class CustomGravity : MonoBehaviour
 
     private void zeroIfOnGround()
     {
-        GroundCheck groundCheck = new GroundCheck(characterController, gravityAcceleration);
-        if (groundCheck.isGrounded())
+        GroundCheck groundCheck = gameObject.GetComponent<GroundCheck>();
+        if (groundCheck.isGrounded)
         {
             gravityVelocity = Vector3.zero;
             previousGravityVelocity = Vector3.zero;
