@@ -8,6 +8,7 @@ public class MovementController : MonoBehaviour
     public float speed;
     private CharacterController characterController;
     private Vector2 moveInputs;
+    public Transform rotation;
 
     // Start is called before the first frame update
     void Start()
@@ -19,7 +20,7 @@ public class MovementController : MonoBehaviour
     void Update()
     {
         updateMoveInputs();
-        applyMovement();
+        applyMovementInLookDirection();
     }
 
     private void updateMoveInputs()
@@ -29,9 +30,11 @@ public class MovementController : MonoBehaviour
         moveInputs = new Vector2(horizontal, vertical);
     }
 
-    private void applyMovement()
+    private void applyMovementInLookDirection()
     {
-        Vector3 movement = new Vector3(moveInputs.x, 0, moveInputs.y);
-        characterController.Move(movement * Time.deltaTime * speed);
+        Vector3 inputMovement = new Vector3(moveInputs.x, 0, moveInputs.y);
+        Vector3 movement = inputMovement * Time.deltaTime * speed;
+        Vector3 movementInLookDirection = rotation.TransformDirection(movement);
+        characterController.Move(movementInLookDirection);
     }
 }

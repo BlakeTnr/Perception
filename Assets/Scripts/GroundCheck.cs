@@ -19,6 +19,7 @@ public class GroundCheck : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
+        Debug.Log("Exited!");
         if (other.gameObject != characterControllerCollider)
         {
             isGrounded = false;
