@@ -7,22 +7,25 @@ public class GroundCheck : MonoBehaviour
 {
     [HideInInspector]
     public bool isGrounded;
-    public Collider characterControllerCollider;
+    public float groundIfContactBelowLocalY;
 
-    void OnTriggerEnter(Collider other)
+    void Update()
     {
-        if (other.gameObject != characterControllerCollider) // Is being triggered by CharacterController
-        {
-            isGrounded = true;
-        }
+        resetIsGrounded();
     }
 
-    void OnTriggerExit(Collider other)
+    private void resetIsGrounded()
     {
-        Debug.Log("Exited!");
-        if (other.gameObject != characterControllerCollider)
+        isGrounded = false;
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit controllerHit)
+    {
+        Vector3 localPoint = gameObject.transform.InverseTransformPoint(controllerHit.point);
+        if (localPoint.y <= groundIfContactBelowLocalY)
         {
-            isGrounded = false;
+            isGrounded = true;
+            return;
         }
     }
 }
