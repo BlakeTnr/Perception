@@ -6,14 +6,14 @@ public class MovementController : MonoBehaviour
 {
 
     public float speed;
-    private CharacterController characterController;
+    private Rigidbody rigidbody;
     private Vector2 moveInputs;
     public Transform rotation;
 
     // Start is called before the first frame update
     void Start()
     {
-        characterController = gameObject.GetComponent<CharacterController>();
+        rigidbody = gameObject.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -35,6 +35,11 @@ public class MovementController : MonoBehaviour
         Vector3 inputMovement = new Vector3(moveInputs.x, 0, moveInputs.y);
         Vector3 movement = inputMovement * Time.deltaTime * speed;
         Vector3 movementInLookDirection = rotation.TransformDirection(movement);
-        characterController.Move(movementInLookDirection);
+        move(movementInLookDirection);
+    }
+
+    private void move(Vector3 movement)
+    {
+        rigidbody.position = rigidbody.position + movement;
     }
 }
