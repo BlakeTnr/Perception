@@ -6,8 +6,14 @@ public class Test : MonoBehaviour
 {
     public GameObject player;
 
-    void LateUpdate()
+    void Start()
     {
-        player.transform.position = new Vector3(0, 0, 0);
+
+    }
+
+    void Update()
+    {
+        Debug.Log(player.transform.position);
+        Debug.Log("c");
     }
 }
