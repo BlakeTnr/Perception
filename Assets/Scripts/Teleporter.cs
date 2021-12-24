@@ -14,8 +14,10 @@ public class Teleporter : MonoBehaviour
 
     private void teleport(CharacterController player)
     {
-        setPlayerPosition(player, otherPortal.transform.position);
-        Debug.Log(player.transform.position);
+        Vector3 relativeToEnterPortal = gameObject.transform.InverseTransformPoint(player.transform.position);
+        relativeToEnterPortal = Vector3.Scale(relativeToEnterPortal, new Vector3(1, 1, 1));
+        Vector3 worldPositionExit = otherPortal.transform.TransformPoint(relativeToEnterPortal);
+        setPlayerPosition(player, worldPositionExit);
     }
 
     private void setPlayerPosition(CharacterController player, Vector3 position)
@@ -30,13 +32,4 @@ public class Teleporter : MonoBehaviour
         player.enabled = !fixEnabled;
     }
 
-    private Vector3 getDisplacement(Vector3 a, Vector3 b)
-    {
-        float x = a.x - b.x;
-        float y = a.y - b.y;
-        float z = a.z - b.z;
-
-        Vector3 displacement = new Vector3(x, y, z);
-        return displacement;
-    }
 }
