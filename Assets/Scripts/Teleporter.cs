@@ -50,7 +50,15 @@ public class Teleporter : MonoBehaviour
 
     private void rotatePlayer(CharacterController player)
     {
+        transferLocalRotation(player);
         makePlayerLookOut(player);
+    }
+
+    private void transferLocalRotation(CharacterController player)
+    {
+        Quaternion localRotation = player.transform.rotation * Quaternion.Inverse(gameObject.transform.rotation);
+        Quaternion newRotation = localRotation * otherPortal.transform.rotation;
+        player.transform.rotation = newRotation;
     }
 
     private void makePlayerLookOut(CharacterController player)
