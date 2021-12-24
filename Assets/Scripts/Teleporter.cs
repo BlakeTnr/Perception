@@ -23,8 +23,9 @@ public class Teleporter : MonoBehaviour
     private void teleport(CharacterController player)
     {
         fixInfiniteTeleporting();
+        rotatePlayer(player);
         portalPositionPlayer(player);
-        makePlayerLookOut(player);
+        rotateGravity(player.gameObject.GetComponent<CustomGravity>());
     }
 
     private void fixInfiniteTeleporting()
@@ -38,6 +39,18 @@ public class Teleporter : MonoBehaviour
         relativeToEnterPortal = flipVector3XZ(relativeToEnterPortal);
         Vector3 worldPositionExit = otherPortal.transform.TransformPoint(relativeToEnterPortal);
         setPlayerPosition(player, worldPositionExit);
+    }
+
+    private void rotateGravity(CustomGravity customGravity)
+    {
+        Vector3 localGravity = gameObject.transform.InverseTransformVector(customGravity.gravityAcceleration);
+        Vector3 newGravity = otherPortal.transform.TransformVector(localGravity);
+        customGravity.gravityAcceleration = newGravity;
+    }
+
+    private void rotatePlayer(CharacterController player)
+    {
+        makePlayerLookOut(player);
     }
 
     private void makePlayerLookOut(CharacterController player)
