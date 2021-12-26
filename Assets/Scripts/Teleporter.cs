@@ -10,7 +10,7 @@ public class Teleporter : MonoBehaviour
     {
         if (gameObject.GetComponent<Teleporter>().enabled)
         {
-            CharacterController player = other.GetComponent<CharacterController>();
+            Rigidbody player = other.GetComponent<Rigidbody>();
             teleport(player);
         }
     }
@@ -20,12 +20,19 @@ public class Teleporter : MonoBehaviour
         gameObject.GetComponent<Teleporter>().enabled = true;
     }
 
-    private void teleport(CharacterController player)
+    private void teleport(Rigidbody player)
     {
+        /*
         fixInfiniteTeleporting();
         rotatePlayer(player);
         portalPositionPlayer(player);
-        rotateGravity(player.gameObject.GetComponent<CustomGravity>());
+        rotateGravity(player.gameObject.GetComponent<RigidBodyCustomGravity>());
+        */
+
+        fixInfiniteTeleporting();
+        rotatePlayer(player); // Issue is here
+        portalPositionPlayer(player);
+        //rotateGravity(player.gameObject.GetComponent<RigidBodyCustomGravity>());
     }
 
     private void fixInfiniteTeleporting()
@@ -33,54 +40,43 @@ public class Teleporter : MonoBehaviour
         otherPortal.GetComponent<Teleporter>().enabled = false;
     }
 
-    private void portalPositionPlayer(CharacterController player)
+    private void portalPositionPlayer(Rigidbody player)
     {
         Vector3 relativeToEnterPortal = gameObject.transform.InverseTransformPoint(player.transform.position);
         relativeToEnterPortal = flipVector3XZ(relativeToEnterPortal);
         Vector3 worldPositionExit = otherPortal.transform.TransformPoint(relativeToEnterPortal);
-        setPlayerPosition(player, worldPositionExit);
+        player.transform.position = worldPositionExit; // Could need fix
     }
 
-    private void rotateGravity(CustomGravity customGravity)
+    private void rotateGravity(RigidBodyCustomGravity customGravity)
     {
-        Vector3 localGravity = gameObject.transform.InverseTransformVector(customGravity.gravityAcceleration);
-        Vector3 newGravity = otherPortal.transform.TransformVector(localGravity);
-        customGravity.gravityAcceleration = newGravity;
+        Vector3 portalRotationDifference = gameObject.transform.rotation.eulerAngles - otherPortal.transform.rotation.eulerAngles;
+        Vector3 newGravity = Quaternion.Euler(portalRotationDifference) * customGravity.gravityForce;
+        customGravity.gravityForce = newGravity;
     }
 
-    private void rotatePlayer(CharacterController player)
+    private void rotatePlayer(Rigidbody player)
     {
-        transferLocalRotation(player);
+        Transform cameraTransform = player.transform.Find("Camera");
+        rotatePlayerToOtherPortal(player.gameObject, cameraTransform);
         makePlayerLookOut(player);
     }
 
-    private void transferLocalRotation(CharacterController player)
+    private void rotatePlayerToOtherPortal(GameObject player, Transform cameraTransform)
     {
-        Quaternion localRotation = player.transform.rotation * Quaternion.Inverse(gameObject.transform.rotation);
-        Quaternion newRotation = localRotation * otherPortal.transform.rotation;
-        player.transform.rotation = newRotation;
+        Quaternion playerLocalRotation = Quaternion.Inverse(gameObject.transform.rotation) * cameraTransform.rotation;
+        Quaternion newWorldRotation = otherPortal.transform.rotation * playerLocalRotation;
+        player.transform.rotation = newWorldRotation;
     }
 
-    private void makePlayerLookOut(CharacterController player)
+    private void makePlayerLookOut(Rigidbody player) // THIS NEEDS TO USE TRANSFORM OF THE CAMERA NOT ROTATION OF PLAYER!!!!!!
     {
-        player.transform.Rotate(new Vector3(0, 180, 0));
+        player.transform.Rotate(player.rotation * new Vector3(0, 180, 0)); // Can't use rotate 180
     }
 
     private Vector3 flipVector3XZ(Vector3 vector)
     {
         return Vector3.Scale(vector, new Vector3(-1, 1, -1));
-    }
-
-    private void setPlayerPosition(CharacterController player, Vector3 position)
-    {
-        characterControllerFix(player, true);
-        player.transform.position = position;
-        characterControllerFix(player, false);
-    }
-
-    private void characterControllerFix(CharacterController player, bool fixEnabled)
-    {
-        player.enabled = !fixEnabled;
     }
 
 }
