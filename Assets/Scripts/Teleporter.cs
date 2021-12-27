@@ -4,14 +4,34 @@ using UnityEngine;
 
 public class Teleporter : MonoBehaviour
 {
-    public GameObject otherPortal;
+
+    /*
+        Todo
+        - Fix the camera not being rotated properly when parent is rotated
+    */
+
+    public GameObject otherPortalView;
+    private GameObject otherPortal;
+    private GameObject gameObjectPortal;
+
+    void Start()
+    {
+        otherPortal = getPortalFromPortalView(otherPortalView);
+        gameObjectPortal = getPortalFromPortalView(gameObject);
+    }
+
+    private GameObject getPortalFromPortalView(GameObject portalView)
+    {
+        GameObject portalOutline = portalView.transform.parent.gameObject;
+        GameObject portal = portalOutline.transform.parent.gameObject;
+        return portal;
+    }
 
     void OnTriggerEnter(Collider other)
     {
         if (gameObject.GetComponent<Teleporter>().enabled)
         {
-            Rigidbody player = other.GetComponent<Rigidbody>();
-            teleport(player);
+            teleport(other.gameObject);
         }
     }
 
@@ -20,63 +40,73 @@ public class Teleporter : MonoBehaviour
         gameObject.GetComponent<Teleporter>().enabled = true;
     }
 
-    private void teleport(Rigidbody player)
+    private void disableOtherPortal()
+    {
+        otherPortalView.GetComponent<Teleporter>().enabled = false;
+    }
+
+    private void teleport(GameObject player)
+    {
+        disableOtherPortal();
+        portalPositionplayer(player);
+        portalRotatePlayer(player);
+        rotateGravity(player.GetComponent<RigidBodyCustomGravity>());
+    }
+
+    private void portalPositionplayer(GameObject player)
+    {
+        movePlayerLocally(player);
+        // should do some flipping sign of x or z (I forgot) to make seamless
+    }
+
+    private void movePlayerLocally(GameObject player)
     {
         /*
-        fixInfiniteTeleporting();
-        rotatePlayer(player);
-        portalPositionPlayer(player);
-        rotateGravity(player.gameObject.GetComponent<RigidBodyCustomGravity>());
+        Pseudocode
+        
+        getLocalPosition
+        setPlayerParentToOther
+        setLocalPosition
         */
 
-        fixInfiniteTeleporting();
-        rotatePlayer(player); // Issue is here
-        portalPositionPlayer(player);
-        //rotateGravity(player.gameObject.GetComponent<RigidBodyCustomGravity>());
+        Transform previousParent = player.transform.parent;
+        player.transform.parent = gameObjectPortal.transform;
+
+        Vector3 localPosition = player.transform.localPosition;
+        player.transform.parent = otherPortal.transform;
+        player.transform.localPosition = localPosition;
+
+        player.transform.parent = previousParent;
     }
 
-    private void fixInfiniteTeleporting()
+    private void portalRotatePlayer(GameObject player)
     {
-        otherPortal.GetComponent<Teleporter>().enabled = false;
+        GameObject camera = player.transform.Find("Camera").gameObject;
+        rotatePlayerLocally(player, camera);
+        rotateCameraOutwards(camera.transform);
     }
 
-    private void portalPositionPlayer(Rigidbody player)
+    private void rotatePlayerLocally(GameObject player, GameObject camera)
     {
-        Vector3 relativeToEnterPortal = gameObject.transform.InverseTransformPoint(player.transform.position);
-        relativeToEnterPortal = flipVector3XZ(relativeToEnterPortal);
-        Vector3 worldPositionExit = otherPortal.transform.TransformPoint(relativeToEnterPortal);
-        player.transform.position = worldPositionExit; // Could need fix
+        Transform previousParent = player.transform.parent;
+        player.transform.parent = gameObjectPortal.transform;
+
+        Quaternion localRotation = player.transform.localRotation;
+        player.transform.parent = otherPortal.transform;
+        player.transform.localRotation = localRotation;
+
+        player.transform.parent = previousParent;
     }
 
-    private void rotateGravity(RigidBodyCustomGravity customGravity)
+    private void rotateCameraOutwards(Transform camera)
     {
-        Vector3 portalRotationDifference = gameObject.transform.rotation.eulerAngles - otherPortal.transform.rotation.eulerAngles;
-        Vector3 newGravity = Quaternion.Euler(portalRotationDifference) * customGravity.gravityForce;
-        customGravity.gravityForce = newGravity;
+        Vector3 newRotation = camera.localRotation.eulerAngles + new Vector3(0, 180, 0);
+        camera.localRotation = Quaternion.Euler(newRotation);
     }
 
-    private void rotatePlayer(Rigidbody player)
+    private void rotateGravity(RigidBodyCustomGravity rigidBodyCustomGravity)
     {
-        Transform cameraTransform = player.transform.Find("Camera");
-        rotatePlayerToOtherPortal(player.gameObject, cameraTransform);
-        makePlayerLookOut(player);
-    }
-
-    private void rotatePlayerToOtherPortal(GameObject player, Transform cameraTransform)
-    {
-        Quaternion playerLocalRotation = Quaternion.Inverse(gameObject.transform.rotation) * cameraTransform.rotation;
-        Quaternion newWorldRotation = otherPortal.transform.rotation * playerLocalRotation;
-        player.transform.rotation = newWorldRotation;
-    }
-
-    private void makePlayerLookOut(Rigidbody player) // THIS NEEDS TO USE TRANSFORM OF THE CAMERA NOT ROTATION OF PLAYER!!!!!!
-    {
-        player.transform.Rotate(player.rotation * new Vector3(0, 180, 0)); // Can't use rotate 180
-    }
-
-    private Vector3 flipVector3XZ(Vector3 vector)
-    {
-        return Vector3.Scale(vector, new Vector3(-1, 1, -1));
+        // Rotate gravity here
     }
 
 }
