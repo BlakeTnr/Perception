@@ -107,6 +107,7 @@ public class Teleporter : MonoBehaviour
     private void rotateGravity(RigidBodyCustomGravity rigidBodyCustomGravity)
     {
         // Rotate gravity here
+
     }
 
 }
