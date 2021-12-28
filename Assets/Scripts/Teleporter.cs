@@ -51,6 +51,7 @@ public class Teleporter : MonoBehaviour
     private void portalPositionplayer(GameObject player)
     {
         movePlayerLocally(player);
+        flipX(player);
         // should do some flipping sign of x or z (I forgot) to make seamless
     }
 
@@ -63,6 +64,15 @@ public class Teleporter : MonoBehaviour
         player.transform.parent = otherPortal.transform;
         player.transform.localPosition = localPosition;
 
+        player.transform.parent = previousParent;
+    }
+
+    private void flipX(GameObject player) // Needs better name
+    {
+        Transform previousParent = player.transform.parent;
+        player.transform.parent = otherPortalView.transform;
+        Vector3 newLocalPosition = Vector3.Scale(player.transform.localPosition, new Vector3(-1, 1, 1));
+        player.transform.localPosition = newLocalPosition;
         player.transform.parent = previousParent;
     }
 
