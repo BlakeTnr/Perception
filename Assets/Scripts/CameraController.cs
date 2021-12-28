@@ -26,13 +26,14 @@ public class CameraController : MonoBehaviour
     {
         Vector2 flippedMouseInputs = new Vector2(mouseInputs.y, mouseInputs.x);
         Vector3 lookRotation = (flippedMouseInputs * sensativity) * Time.deltaTime;
-        gameObject.transform.Rotate(lookRotation);
+        Vector3 newLocalRotation = gameObject.transform.localRotation.eulerAngles + lookRotation;
+        gameObject.transform.localRotation = Quaternion.Euler(newLocalRotation);
     }
 
     private void applyZRotationFix() // For loose coupling, this maybe should be it's own script
     {
-        Vector3 rotation = gameObject.transform.rotation.eulerAngles;
+        Vector3 rotation = gameObject.transform.localRotation.eulerAngles;
         rotation.z = 0;
-        gameObject.transform.rotation = Quaternion.Euler(rotation);
+        gameObject.transform.localRotation = Quaternion.Euler(rotation);
     }
 }
