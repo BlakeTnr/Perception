@@ -5,11 +5,6 @@ using UnityEngine;
 public class Teleporter : MonoBehaviour
 {
 
-    /*
-        Todo
-        - Fix the camera not being rotated properly when parent is rotated
-    */
-
     public GameObject otherPortalView;
     private GameObject otherPortal;
     private GameObject gameObjectPortal;
@@ -61,14 +56,6 @@ public class Teleporter : MonoBehaviour
 
     private void movePlayerLocally(GameObject player)
     {
-        /*
-        Pseudocode
-        
-        getLocalPosition
-        setPlayerParentToOther
-        setLocalPosition
-        */
-
         Transform previousParent = player.transform.parent;
         player.transform.parent = gameObjectPortal.transform;
 
@@ -106,8 +93,9 @@ public class Teleporter : MonoBehaviour
 
     private void rotateGravity(RigidBodyCustomGravity rigidBodyCustomGravity)
     {
-        // Rotate gravity here
-
+        Vector3 gravityLocal = gameObjectPortal.transform.InverseTransformVector(rigidBodyCustomGravity.gravityForce);
+        Vector3 newGravity = otherPortal.transform.TransformVector(gravityLocal);
+        rigidBodyCustomGravity.gravityForce = newGravity;
     }
 
 }
