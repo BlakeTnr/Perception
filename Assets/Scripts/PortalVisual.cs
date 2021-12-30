@@ -34,7 +34,7 @@ public class PortalVisual : MonoBehaviour
         Transform portalCameraPreviousParentTransform = portalCamera.transform.parent;
         Transform playerCameraPreviousParentTransform = playerCamera.transform.parent;
         portalCamera.transform.parent = otherPortalView.transform;
-        playerCamera.transform.parent = gameObjectPortal.transform;
+        playerCamera.transform.parent = gameObject.transform;
         positionCamera();
         rotateCamera();
         portalCamera.transform.parent = portalCameraPreviousParentTransform;
