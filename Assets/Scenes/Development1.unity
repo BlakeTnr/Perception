@@ -129,7 +129,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1236
+  m_Name: pb_Mesh-1232
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -939,6 +939,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Portal2
       objectReference: {fileID: 0}
+    - target: {fileID: 1412651003374703677, guid: def076ed50355d648a4e64923abe9f9c, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2450236238145582268, guid: def076ed50355d648a4e64923abe9f9c, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -995,6 +999,14 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 358591296}
+    - target: {fileID: 4173968641962758809, guid: def076ed50355d648a4e64923abe9f9c, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4595324619878165644, guid: def076ed50355d648a4e64923abe9f9c, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4612695847239662350, guid: def076ed50355d648a4e64923abe9f9c, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -1199,7 +1211,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16944
+  m_Name: pb_Mesh16966
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1422,7 +1434,7 @@ Camera:
   field of view: 60
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1460,6 +1472,10 @@ PrefabInstance:
     - target: {fileID: 1412651003374703677, guid: def076ed50355d648a4e64923abe9f9c, type: 3}
       propertyPath: m_Name
       value: Portal2 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1412651003374703677, guid: def076ed50355d648a4e64923abe9f9c, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2450236238145582268, guid: def076ed50355d648a4e64923abe9f9c, type: 3}
       propertyPath: m_Mesh
@@ -1517,6 +1533,14 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 282200049}
+    - target: {fileID: 4173968641962758809, guid: def076ed50355d648a4e64923abe9f9c, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4595324619878165644, guid: def076ed50355d648a4e64923abe9f9c, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4612695847239662350, guid: def076ed50355d648a4e64923abe9f9c, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -1710,13 +1734,28 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4595324619878165644, guid: def076ed50355d648a4e64923abe9f9c, type: 3}
   m_PrefabInstance: {fileID: 457139793}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1539619821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1539619814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e4a70a2a6809fd43a2a808d4ac2a45c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  otherPortalView: {fileID: 546379618}
+  playerCamera: {fileID: 583170324}
+  screenCutoutShader: {fileID: 4800000, guid: 0ab8adfdccd821d4497a6184a13f8f97, type: 3}
 --- !u!43 &1835038413
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16940
+  m_Name: pb_Mesh16946
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
