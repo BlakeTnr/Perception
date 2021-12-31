@@ -5,7 +5,16 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     private Vector2 mouseInputs;
-    public Vector2 sensativity;
+    public Vector2 sensitivity;
+
+    void Start() {
+        useSavedSensitivity();
+    }
+
+    private void useSavedSensitivity() {
+        float savedSensitivity = PlayerPrefs.GetFloat("sensitivity", 100);
+        sensitivity = new Vector2(savedSensitivity, savedSensitivity);
+    }
 
     // Update is called once per frame
     void Update()
@@ -25,7 +34,7 @@ public class CameraController : MonoBehaviour
     private void applyMouseRotation()
     {
         Vector2 flippedMouseInputs = new Vector2(mouseInputs.y, mouseInputs.x);
-        Vector3 lookRotation = (flippedMouseInputs * sensativity) * Time.deltaTime;
+        Vector3 lookRotation = (flippedMouseInputs * sensitivity) * Time.deltaTime;
         Vector3 newLocalRotation = gameObject.transform.localRotation.eulerAngles + lookRotation;
         gameObject.transform.localRotation = Quaternion.Euler(newLocalRotation);
     }
